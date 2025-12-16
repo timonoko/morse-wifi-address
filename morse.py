@@ -16,11 +16,19 @@ DASH_DURATION_MS = DOT_DURATION_MS * 5
 SYMBOL_PAUSE_MS = DOT_DURATION_MS*3
 # LETTER_PAUSE_MS = DOT_DURATION_MS * 3 # Not strictly needed for a single digit
 
+# Some boards have Inverted LED
+INVERT=False
+
 def blink_led(duration_ms):
     """Turns the LED on for a specified duration and then off."""
-    led.on()
-    time.sleep_ms(duration_ms)
-    led.off()
+    if INVERT:
+        led.off()
+        time.sleep_ms(duration_ms)
+        led.on()
+    else:
+        led.on()
+        time.sleep_ms(duration_ms)
+        led.off()
 
 def morse_digit(digit):
     morse_sequence = MORSE_CODE_DICT.get(str(digit))
@@ -37,6 +45,9 @@ def morse_digit(digit):
         time.sleep_ms(SYMBOL_PAUSE_MS)
 
 def doit(number_to_morse):
+    if INVERT:
+        led.on()
+        time.sleep(5)
     number=number_to_morse
     print("-" * 30)
     print(f"Configured digit to morse: {number}")
